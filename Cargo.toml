@@ -1,0 +1,18 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/*"
+]
+
+[workspace.package]
+name = "argus"
+version = "0.1.0"
+authors = ["Suberlin Sinaga <suberlinsinaga@gmail.com>"]
+edition = "2024"
+
+[workspace.dependencies]
+async-trait = "0.1.92"
+chrono = { version = "0.4.45", features = ["serde"] }
+tokio-cron-scheduler = "0.15.1"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.23", features = ["env-filter"] }

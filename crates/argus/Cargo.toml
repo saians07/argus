@@ -1,0 +1,12 @@
+[package]
+name = "argus"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+
+[dependencies]
+schedulers = { path = "../schedulers" }
+logs = { path = "../logs", optional = true }
+
+[features]
+logs = ["dep:logs"]
