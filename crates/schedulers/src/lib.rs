@@ -11,7 +11,7 @@ impl Supervisor {
         }
     }
 
-    pub async fn activate_bee<T: Worker + Send + Sync + Clone + 'static>(
+    pub async fn activate_worker<T: Worker + Send + Sync + Clone + 'static>(
         &self,
         schedule: &str,
         worker: T,
