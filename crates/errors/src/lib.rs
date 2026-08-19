@@ -13,12 +13,13 @@ pub enum CustomErr {
     },
 
     #[error("No sufficient privilege to access the resources.")]
-    #[serde(skip)]
     UNAUTHENTICATED,
 
     #[error("This resource is not available for now.")]
-    #[serde(skip)]
     FORBIDDEN,
+
+    #[error("Invalid request.")]
+    BADREQUEST,
 }
 
 impl CustomErr {
@@ -44,6 +45,7 @@ impl CustomErr {
         match self {
             CustomErr::FORBIDDEN => 403,
             CustomErr::UNAUTHENTICATED => 401,
+            CustomErr::BADREQUEST => 400,
             CustomErr::Operation {
                 operation: _,
                 source: _,
