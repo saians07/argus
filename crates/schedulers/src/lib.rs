@@ -11,11 +11,15 @@ impl Supervisor {
         }
     }
 
+    pub async fn get_schedule<T: Worker + Send + Sync + Clone + 'static>(&self, worker: &T) -> Box<str> {
+        worker.get_schedule().await
+    }
+
     pub async fn activate_worker<T: Worker + Send + Sync + Clone + 'static>(
         &self,
-        schedule: &str,
         worker: T,
     ) {
+        let schedule = self.get_schedule(&worker).await;
         let job = Job::new_async(schedule, move |_uuid, _l| {
             let worker_c = worker.clone();
             Box::pin(async move { worker_c.execute().await })
@@ -32,4 +36,5 @@ impl Supervisor {
 #[async_trait::async_trait]
 pub trait Worker {
     async fn execute(&self) -> ();
+    async fn get_schedule(&self) -> Box<str>;
 }
