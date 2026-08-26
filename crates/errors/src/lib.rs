@@ -3,7 +3,7 @@ use std::borrow::Cow;
 use thiserror::Error;
 
 #[derive(Deserialize, Error, Debug)]
-pub enum CustomErr {
+pub enum ArgusErr {
     #[error("Operation failed: {operation}")]
     #[serde(skip)]
     Operation {
@@ -22,20 +22,20 @@ pub enum CustomErr {
     BADREQUEST,
 }
 
-impl CustomErr {
+impl ArgusErr {
     pub fn operation<S, E>(operation: S, source: E) -> Self
     where
         S: Into<Cow<'static, str>>,
         E: std::error::Error + Sync + Send + 'static,
     {
-        CustomErr::Operation {
+        ArgusErr::Operation {
             operation: operation.into(),
             source: Some(Box::new(source)),
         }
     }
 
     pub fn operation_ori<S: Into<Cow<'static, str>>>(operation: S) -> Self {
-        CustomErr::Operation {
+        ArgusErr::Operation {
             operation: operation.into(),
             source: None,
         }
@@ -43,10 +43,10 @@ impl CustomErr {
 
     pub fn error_code(&self) -> i32 {
         match self {
-            CustomErr::FORBIDDEN => 403,
-            CustomErr::UNAUTHENTICATED => 401,
-            CustomErr::BADREQUEST => 400,
-            CustomErr::Operation {
+            ArgusErr::FORBIDDEN => 403,
+            ArgusErr::UNAUTHENTICATED => 401,
+            ArgusErr::BADREQUEST => 400,
+            ArgusErr::Operation {
                 operation: _,
                 source: _,
             } => 501,
