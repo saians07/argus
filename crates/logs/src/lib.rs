@@ -75,7 +75,7 @@ macro_rules! log_info_with_ids {
 macro_rules! log_warning_with_ids {
     ($request_id:expr, $($arg:tt)*) => {
         let short_id = &$request_id.as_str()[..8];
-        $crate::tracing::warning!("[{}] {}", short_id, format!($($arg)*))
+        $crate::tracing::warn!("[{}] {}", short_id, format!($($arg)*))
     };
 }
 
