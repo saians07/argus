@@ -2,11 +2,11 @@
 pub use tracing;
 
 use tracing_subscriber::{
+    EnvFilter,
     fmt::{format, layer, time},
     layer::SubscriberExt,
     registry,
     util::SubscriberInitExt,
-    EnvFilter,
 };
 
 struct ChronoLocalTimer;
@@ -29,6 +29,7 @@ pub fn start_tracing(query: &str) {
                 .with_target(true)
                 .with_thread_ids(true)
                 .with_timer(ChronoLocalTimer)
+                .with_test_writer()
                 .compact(),
         )
         .try_init();
