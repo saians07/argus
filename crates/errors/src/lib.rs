@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use std::borrow::Cow;
+use std::{borrow::Cow, io};
 use thiserror::Error;
 
 #[derive(Deserialize, Error, Debug)]
@@ -20,6 +20,10 @@ pub enum ArgusErr {
 
     #[error("Invalid request.")]
     BADREQUEST,
+
+    #[error("{0}")]
+    #[serde(skip)]
+    IOError(io::Error),
 }
 
 impl ArgusErr {
@@ -46,10 +50,17 @@ impl ArgusErr {
             ArgusErr::FORBIDDEN => 403,
             ArgusErr::UNAUTHENTICATED => 401,
             ArgusErr::BADREQUEST => 400,
+            ArgusErr::IOError(_) => 500,
             ArgusErr::Operation {
                 operation: _,
                 source: _,
             } => 501,
         }
+    }
+}
+
+impl From<io::Error> for ArgusErr {
+    fn from(err: io::Error) -> Self {
+        ArgusErr::IOError(err)
     }
 }
